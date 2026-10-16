@@ -1,0 +1,495 @@
+<!-- ================= INICIO DE LA PARTE 1 DE 2 (AULA FÁCIL NEM - PRIMARIA) ================= -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#f5f5f7" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Aula Fácil NEM" />
+  <title>Aula Fácil NEM | Mi Asistente de Primaria</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg-app: #f5f5f7;
+      --bg-surface: rgba(255, 255, 255, 0.94);
+      --bg-header: rgba(255, 255, 255, 0.88);
+      --text-main: #1d1d1f;
+      --accent-primary: #0071e3;
+      --card-border: rgba(0, 0, 0, 0.09);
+      --card-shadow: 0 8px 30px -6px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
+      --base-font-size: 16px;
+    }
+
+    body.theme-chiapas {
+      --bg-app: #faf6f6;
+      --bg-header: rgba(94, 17, 29, 0.95);
+      --accent-primary: #9f1239;
+    }
+
+    body.theme-esmeralda {
+      --bg-app: #f2f8f5;
+      --bg-header: rgba(6, 55, 42, 0.95);
+      --accent-primary: #059669;
+    }
+
+    /* Modo Letra Grande para mayor comodidad visual */
+    html.large-font {
+      font-size: 18.5px !important;
+    }
+
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Plus Jakarta Sans', sans-serif;
+      font-size: var(--base-font-size);
+      background-color: var(--bg-app);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(0, 113, 227, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.05) 0px, transparent 50%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    header.no-print {
+      background: var(--bg-header) !important;
+      backdrop-filter: saturate(180%) blur(24px);
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      border-bottom: 1px solid var(--card-border) !important;
+    }
+
+    body.theme-chiapas header.no-print,
+    body.theme-esmeralda header.no-print {
+      color: #ffffff;
+    }
+
+    .apple-card {
+      background: var(--bg-surface) !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: 24px !important;
+      box-shadow: var(--card-shadow) !important;
+    }
+
+    select, input[type="text"], input[type="password"], input[type="url"], input[type="date"], input[type="number"], textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 14px !important;
+      border: 1.5px solid #cbd5e1 !important;
+      background-color: #ffffff;
+      color: #0f172a;
+      font-weight: 500;
+      transition: all 0.2s ease !important;
+    }
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--accent-primary) !important;
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.18) !important;
+      outline: none !important;
+    }
+
+    button {
+      transition: all 0.18s cubic-bezier(0.25, 1, 0.5, 1) !important;
+      cursor: pointer;
+    }
+    button:active {
+      transform: scale(0.96) !important;
+    }
+
+    /* Botones Principales Gigantes estilo iPad */
+    .main-nav-pill {
+      border-radius: 18px !important;
+      font-weight: 700 !important;
+      border: 2px solid transparent;
+    }
+    .main-nav-pill.active-nav {
+      background: #0071e3 !important;
+      color: #ffffff !important;
+      box-shadow: 0 6px 18px rgba(0, 113, 227, 0.32) !important;
+    }
+
+    .gemini-magic-btn {
+      background: linear-gradient(135deg, #0071e3 0%, #7c3aed 50%, #db2777 100%);
+      color: #ffffff;
+    }
+
+    .eval-touch-btn {
+      min-width: 48px;
+      min-height: 42px;
+      user-select: none;
+    }
+
+    @media print {
+      @page { margin: 10mm; }
+      html, body { background: #fff !important; background-image: none !important; color: #000 !important; font-size: 10pt !important; overflow: visible !important; }
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      .print-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; page-break-inside: auto; }
+      .print-table tr { page-break-inside: avoid; page-break-after: auto; }
+      .print-table th, .print-table td { border: 1px solid #000 !important; padding: 5px 7px !important; vertical-align: top; text-align: left; font-size: 9pt; }
+      .print-table th { background-color: #e2e8f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-weight: 700; }
+      .header-custom-text { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- =========================================================================
+       BARRA SUPERIOR SÚPER SENCILLA Y ACCESIBLE
+  ========================================================================== -->
+  <header class="no-print sticky top-0 z-40 w-full">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <!-- Identidad de la Maestra -->
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 shrink-0 rounded-2xl gemini-magic-btn flex items-center justify-center shadow-md font-extrabold text-white text-xl">
+            🍎
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-extrabold text-base sm:text-xl tracking-tight">Mi Aula Fácil • Primaria NEM</h1>
+              <span class="hidden sm:inline-block text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 border border-blue-500/20">
+                Nueva Escuela Mexicana
+              </span>
+            </div>
+            <p class="text-xs opacity-75">Planeaciones por Proyectos, Libros SEP (1° a 6°), Asistencia y Evaluación</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de Ayuda Visual Rápida -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" onclick="toggleLargeFontMode()" id="font-size-btn" class="px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-extrabold bg-amber-500/15 text-amber-800 border border-amber-500/30 flex items-center gap-1.5" title="Hacer toda la letra más grande">
+          🔍 <span>A+ Letra Grande</span>
+        </button>
+
+        <select onchange="changeTheme(this.value)" id="theme-select" class="px-3 py-2 rounded-2xl text-xs sm:text-sm font-bold cursor-pointer w-auto">
+          <option value="">🎨 Color: Blanco Apple</option>
+          <option value="theme-chiapas">🍷 Color: Guinda Oficial</option>
+          <option value="theme-esmeralda">🌿 Color: Verde Escuela</option>
+        </select>
+
+        <button type="button" onclick="openHeaderModal()" class="px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-bold bg-orange-500/15 text-orange-700 border border-orange-500/30 flex items-center gap-1.5">
+          🖼️ <span>Mis Logos y Escuela</span>
+        </button>
+
+        <button type="button" onclick="openInstallHelpModal()" class="bg-[#0071e3] hover:bg-[#0077ed] text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-2xl shadow-sm flex items-center gap-1">
+          📲 <span>Instalar</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         MENÚ PRINCIPAL: 5 BOTONES GRANDES Y MUY CLAROS
+    ========================================================================== -->
+    <nav class="max-w-7xl mx-auto px-3 sm:px-6 pb-3 pt-1">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-black/5 p-2 rounded-3xl">
+        <button type="button" onclick="showMainSection('planeacion')" id="nav-btn-planeacion" class="main-nav-pill active-nav py-3 px-3 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-white text-slate-800">
+          <span class="text-lg">📋</span>
+          <span>1. Hacer Planeación</span>
+        </button>
+
+        <button type="button" onclick="showMainSection('libros')" id="nav-btn-libros" class="main-nav-pill py-3 px-3 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-white/80 hover:bg-white text-slate-800">
+          <span class="text-lg">📚</span>
+          <span>2. Libros SEP (1° a 6°)</span>
+        </button>
+
+        <button type="button" onclick="showMainSection('evaluacion')" id="nav-btn-evaluacion" class="main-nav-pill py-3 px-3 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-white/80 hover:bg-white text-slate-800">
+          <span class="text-lg">✅</span>
+          <span>3. Lista y Evaluación</span>
+        </button>
+
+        <button type="button" onclick="showMainSection('ia')" id="nav-btn-ia" class="main-nav-pill py-3 px-3 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-white/80 hover:bg-white text-slate-800">
+          <span class="text-lg">✨</span>
+          <span>4. Ayuda IA y Videos</span>
+        </button>
+
+        <button type="button" onclick="showMainSection('imprimir')" id="nav-btn-imprimir" class="main-nav-pill col-span-2 sm:col-span-1 py-3 px-3 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-amber-400/90 hover:bg-amber-400 text-slate-950">
+          <span class="text-lg">🖨️</span>
+          <span>5. Imprimir / PDF</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="no-print flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-5 space-y-6">
+
+    <!-- ===================================================================
+         SECCIÓN 1: PLANEACIÓN FÁCIL PASO A PASO (LOS 4 CAMPOS FORMATIVOS)
+    ==================================================================== -->
+    <section id="sec-planeacion" class="app-section space-y-6">
+      <!-- Barra para cambiar entre planeaciones guardadas o crear una nueva -->
+      <div class="apple-card p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 flex-1">
+          <label class="text-xs sm:text-sm font-extrabold uppercase text-slate-600 shrink-0">📂 Mis Planeaciones Guardadas:</label>
+          <select id="plan-selector" onchange="switchActivePlan(this.value)" class="px-3.5 py-2.5 text-sm font-bold text-slate-900"></select>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" onclick="createNewPlan()" class="bg-[#0071e3] hover:bg-[#0077ed] text-white font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-2xl shadow-sm">
+            ➕ Nueva Planeación en Blanco
+          </button>
+          <button type="button" onclick="duplicateActivePlan()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm px-4 py-2.5 rounded-2xl">
+            📄 Duplicar
+          </button>
+          <button type="button" onclick="deleteActivePlan()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs sm:text-sm px-3.5 py-2.5 rounded-2xl" title="Borrar planeación actual">
+            🗑️
+          </button>
+        </div>
+      </div>
+
+      <!-- PASO 1: DATOS DE LA ESCUELA Y GRADO -->
+      <div class="apple-card overflow-hidden">
+        <div class="bg-slate-900 text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-amber-400 text-slate-950 font-extrabold text-xs">PASO 1</span>
+            <h2 class="font-extrabold text-sm sm:text-base">Datos de mi Escuela, Grado y Temporalidad</h2>
+          </div>
+          <span class="text-xs text-slate-300">Todo lo que cambies aquí se guarda automáticamente</span>
+        </div>
+
+        <div class="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-extrabold uppercase text-slate-600 mb-1">Nombre de la Escuela Primaria</label>
+            <input type="text" id="p-escuela" oninput="saveActivePlanFromInputs()" class="px-3.5 py-2.5 text-sm font-bold" />
+          </div>
+          <div>
+            <label class="block text-xs font-extrabold uppercase text-slate-600 mb-1">Clave CCT</label>
+            <input type="text" id="p-cct" oninput="saveActivePlanFromInputs()" placeholder="Ej. 07DPR0123X" class="px-3.5 py-2.5 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-extrabold uppercase text-slate-600 mb-1">Zona / Sector</label>
+            <input type="text" id="p-zona" oninput="saveActivePlanFromInputs()" placeholder="Ej. Zona 015 / Sector 02" class="px-3.5 py-2.5 text-sm" />
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-extrabold uppercase text-slate-600 mb-1">Nombre de la Maestra o Maestro</label>
+            <input type="text" id="p-maestra" oninput="saveActivePlanFromInputs()" class="px-3.5 py-2.5 text-sm font-bold" />
+          </div>
+          <div>
+            <label class="block text-xs font-extrabold uppercase text-blue-700 mb-1">Grado y Fase (Elige aquí)</label>
+            <select id="p-grado" onchange="onGradeChangeUpdateFase(this.value)" class="px-3.5 py-2.5 text-sm font-extrabold">
+              <option value="1º">1° de Primaria (Fase 3)</option>
+              <option value="2º">2° de Primaria (Fase 3)</option>
+              <option value="3º">3° de Primaria (Fase 4)</option>
+              <option value="4º" selected>4° de Primaria (Fase 4)</option>
+              <option value="5º">5° de Primaria (Fase 5)</option>
+              <option value="6º">6° de Primaria (Fase 5)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-extrabold uppercase text-slate-600 mb-1">Grupo y Periodo / Mes</label>
+            <div class="grid grid-cols-2 gap-2">
+              <input type="text" id="p-grupo" oninput="saveActivePlanFromInputs()" placeholder="Grupo A" class="px-3 py-2.5 text-sm font-bold text-center" />
+              <input type="text" id="p-mes" oninput="saveActivePlanFromInputs()" placeholder="Octubre" class="px-3 py-2.5 text-sm" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 2: ELEGIR CAMPO FORMATIVO Y AUTOCOMPLETAR CON 1 CLIC -->
+      <div class="apple-card overflow-hidden">
+        <div class="bg-slate-900 text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-amber-400 text-slate-950 font-extrabold text-xs">PASO 2</span>
+            <h2 class="font-extrabold text-sm sm:text-base">Elige el Campo Formativo y el Libro SEP</h2>
+          </div>
+          <button type="button" onclick="autoFillProjectWithMagic()" class="gemini-magic-btn font-extrabold text-xs sm:text-sm px-4 py-1.5 rounded-full shadow-md flex items-center gap-1.5">
+            ✨ Autocompletar Proyecto Automáticamente
+          </button>
+        </div>
+
+        <div class="p-5 space-y-5">
+          <!-- 4 Botones Grandes para los 4 Campos Formativos de la NEM -->
+          <div>
+            <label class="block text-xs sm:text-sm font-extrabold text-slate-700 mb-2">1. Toca el Campo Formativo que vas a trabajar (o selecciona varios):</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <button type="button" onclick="selectCampoFormativo('Lenguajes')" id="btn-campo-lenguajes" class="p-3.5 rounded-2xl border-2 text-left transition flex items-start gap-3 bg-rose-50/70 border-rose-300 text-rose-950">
+                <span class="text-2xl">📕</span>
+                <div>
+                  <div class="font-extrabold text-sm">Lenguajes</div>
+                  <div class="text-xs opacity-80">Español, Artes, Lengua Indígena e Inglés</div>
+                </div>
+              </button>
+
+              <button type="button" onclick="selectCampoFormativo('Saberes y Pensamiento Científico')" id="btn-campo-saberes" class="p-3.5 rounded-2xl border-2 text-left transition flex items-start gap-3 bg-sky-50/70 border-sky-300 text-sky-950">
+                <span class="text-2xl">📘</span>
+                <div>
+                  <div class="font-extrabold text-sm">Saberes y Pensamiento Científico</div>
+                  <div class="text-xs opacity-80">Matemáticas y Ciencias Naturales (STEAM)</div>
+                </div>
+              </button>
+
+              <button type="button" onclick="selectCampoFormativo('Ética, Naturaleza y Sociedades')" id="btn-campo-etica" class="p-3.5 rounded-2xl border-2 text-left transition flex items-start gap-3 bg-emerald-50/70 border-emerald-300 text-emerald-950">
+                <span class="text-2xl">📗</span>
+                <div>
+                  <div class="font-extrabold text-sm">Ética, Naturaleza y Sociedades</div>
+                  <div class="text-xs opacity-80">Historia, Geografía y Formación Cívica</div>
+                </div>
+              </button>
+
+              <button type="button" onclick="selectCampoFormativo('De lo Humano y lo Comunitario')" id="btn-campo-humano" class="p-3.5 rounded-2xl border-2 text-left transition flex items-start gap-3 bg-purple-50/70 border-purple-300 text-purple-950">
+                <span class="text-2xl">📙</span>
+                <div>
+                  <div class="font-extrabold text-sm">De lo Humano y lo Comunitario</div>
+                  <div class="text-xs opacity-80">Socioemocional, Vida Saludable y Ed. Física</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Selector rápido de Temas Oficiales por Campo Formativo -->
+          <div class="p-4 rounded-2xl bg-blue-50/80 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span class="text-xs font-extrabold uppercase text-blue-900 block">💡 ¿Quieres ahorrar tiempo? Elige un tema listo de este Campo Formativo:</span>
+              <span class="text-xs text-blue-700">Al seleccionarlo se llenarán solos el Contenido, el PDA, la Metodología y las Actividades.</span>
+            </div>
+            <select id="preset-project-selector" onchange="applyPresetProject(this.value)" class="sm:w-96 px-3.5 py-2.5 text-xs sm:text-sm font-bold bg-white"></select>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-extrabold uppercase text-slate-600 mb-1">Campo Formativo Seleccionado</label>
+              <input type="text" id="p-campo" oninput="saveActivePlanFromInputs()" class="px-3.5 py-2.5 text-sm font-bold" />
+            </div>
+            <div>
+              <label class="block text-xs font-extrabold uppercase text-slate-600 mb-1">Metodología Sugerida (NEM)</label>
+              <select id="p-metodologia" onchange="saveActivePlanFromInputs()" class="px-3.5 py-2.5 text-sm font-semibold">
+                <option value="Aprendizaje Basado en Proyectos Comunitarios (ABPC)">Proyectos Comunitarios (Lenguajes)</option>
+                <option value="Aprendizaje Basado en Indagación (STEAM)">Indagación STEAM (Saberes y Matemáticas)</option>
+                <option value="Aprendizaje Basado en Problemas (ABP)">Basado en Problemas - ABP (Ética, Naturaleza)</option>
+                <option value="Aprendizaje Servicio (AS)">Aprendizaje Servicio - AS (De lo Humano)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-extrabold uppercase text-slate-600 mb-1">Escenario y Libro de Texto SEP</label>
+              <input type="text" id="p-libro" oninput="saveActivePlanFromInputs()" placeholder="Ej. Proyectos de Aula (Págs. 34 a 47)" class="px-3.5 py-2.5 text-sm font-semibold" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-xs font-extrabold uppercase text-slate-600">Nombre del Proyecto *</label>
+                <button type="button" onclick="dictateToField('p-proyecto')" class="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">🎤 Dictar con la voz</button>
+              </div>
+              <input type="text" id="p-proyecto" oninput="saveActivePlanFromInputs()" placeholder="Ej. ¡Un viaje por los relatos de mi comunidad!" class="px-3.5 py-2.5 text-sm font-bold" />
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-xs font-extrabold uppercase text-slate-600">Propósito o Problemática que atendemos</label>
+                <button type="button" onclick="dictateToField('p-proposito')" class="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">🎤 Dictar con la voz</button>
+              </div>
+              <input type="text" id="p-proposito" oninput="saveActivePlanFromInputs()" class="px-3.5 py-2.5 text-sm" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-xs font-extrabold uppercase text-slate-600">Contenido del Programa Sintético</label>
+                <button type="button" onclick="dictateToField('p-contenido')" class="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">🎤 Dictar</button>
+              </div>
+              <textarea id="p-contenido" rows="3" oninput="saveActivePlanFromInputs()" class="p-3 text-sm"></textarea>
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-xs font-extrabold uppercase text-slate-600">Proceso de Desarrollo de Aprendizaje (PDA)</label>
+                <button type="button" onclick="dictateToField('p-pda')" class="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">🎤 Dictar</button>
+              </div>
+              <textarea id="p-pda" rows="3" oninput="saveActivePlanFromInputs()" class="p-3 text-sm"></textarea>
+            </div>
+          </div>
+
+          <!-- Ejes Articuladores con casillas grandes -->
+          <div>
+            <label class="block text-xs font-extrabold uppercase text-slate-600 mb-2">Ejes Articuladores (Toca para marcar o desmarcar):</label>
+            <div id="p-ejes-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 3: ACTIVIDADES / SESIONES DEL PROYECTO (TOTALMENTE EDITABLES) -->
+      <div class="apple-card overflow-hidden">
+        <div class="bg-slate-900 text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-amber-400 text-slate-950 font-extrabold text-xs">PASO 3</span>
+            <h2 class="font-extrabold text-sm sm:text-base">Actividades Diarias o Momentos del Proyecto</h2>
+          </div>
+          <button type="button" onclick="addProjectSession()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm px-4 py-2 rounded-full shadow-sm">
+            ➕ Agregar Otro Día / Sesión
+          </button>
+        </div>
+
+        <div id="p-sessions-list" class="p-5 space-y-4"></div>
+      </div>
+
+      <!-- Barra Inferior Flotante de Acción Rápida -->
+      <div class="sticky bottom-3 z-30 bg-slate-950/95 backdrop-blur-xl text-white p-4 rounded-3xl shadow-2xl border border-white/15 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <span class="text-xs sm:text-sm text-slate-200 font-medium">✅ Tu planeación se guarda sola mientras escribes.</span>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" onclick="showMainSection('libros')" class="bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-2xl">
+            📚 Ver Libros SEP
+          </button>
+          <button type="button" onclick="showMainSection('evaluacion')" class="bg-[#0071e3] hover:bg-[#0077ed] text-white font-extrabold text-xs sm:text-sm px-5 py-2.5 rounded-2xl">
+            ✅ Ir a Lista de Asistencia y Cotejo
+          </button>
+          <button type="button" onclick="openPrintPreview('plan')" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm px-5 py-2.5 rounded-2xl">
+            🖨️ Imprimir Planeación
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECCIÓN 2: BIBLIOTECA DE LIBROS SEP / CONALITEG (1° A 6° DE PRIMARIA)
+    ==================================================================== -->
+    <section id="sec-libros" class="app-section hidden space-y-6">
+      <div class="apple-card p-5 sm:p-6 space-y-5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-emerald-100 text-emerald-900">Libros de Texto Gratuitos • CONALITEG / SEP</span>
+            <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 mt-1">📚 Biblioteca de Libros de la Nueva Escuela Mexicana (1° a 6°)</h2>
+            <p class="text-xs sm:text-sm text-slate-600">Elige el grado de tu grupo para abrir al instante cualquiera de los libros oficiales o anotar las páginas en tu planeación.</p>
+          </div>
+
+          <!-- Botones de Grado 1° a 6° -->
+          <div class="flex flex-wrap gap-1.5 bg-slate-100 p-2 rounded-2xl" id="books-grade-buttons">
+            <button type="button" onclick="selectBooksGrade(1)" id="bgrade-1" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-white text-slate-800">1°</button>
+            <button type="button" onclick="selectBooksGrade(2)" id="bgrade-2" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-white text-slate-800">2°</button>
+            <button type="button" onclick="selectBooksGrade(3)" id="bgrade-3" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-white text-slate-800">3°</button>
+            <button type="button" onclick="selectBooksGrade(4)" id="bgrade-4" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-[#0071e3] text-white shadow">4°</button>
+            <button type="button" onclick="selectBooksGrade(5)" id="bgrade-5" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-white text-slate-800">5°</button>
+            <button type="button" onclick="selectBooksGrade(6)" id="bgrade-6" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-white text-slate-800">6°</button>
+          </div>
+        </div>
+
+        <!-- Estantería Visual de los 6 Libros Oficiales del Grado Seleccionado -->
+        <div id="conaliteg-books-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+        <!-- Visor Integrado o Acceso Directo al Catálogo CONALITEG y Google Drive -->
+        <div class="p-4 sm:p-5 rounded-3xl bg-slate-900 text-white space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 class="font-extrabold text-sm sm:text-base text-amber-300">📖 Lector de Libros dentro de la Aplicación</h3>
+              <p class="text-xs text-slate-300">Toca "Ver Libro Aquí" en cualquiera de las tarjetas de arriba o pega el enlace de un PDF de tu Google Drive.</p>
+            </div>
+            <a href="https://libros.conaliteg.gob.mx/primaria.html" target="_blank" rel="noopener" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm px-4 py-2 rounded-full shrink-0 text-center">
+              🌐 Abrir Portal Oficial CONALITEG Completo ↗
+            </a>
+          </div>
+          <div id="inline-book-viewer-box" class="hidden space-y-2 pt-2">
+            <div class="flex items-center justify-between bg-white/10 px-4 py-2 rounded-xl text-xs">
+              <span id="inline-book-title" class="font-bold text-amber-300">Libro SEP</span>
+              <button type="button" onclick="document.getElementById('inline-book-viewer-box').classList.add('hidden')" class="text-white font-bold px-2 py-0.5 rounded bg-rose-600">Cerrar Lector ✕</button>
+            </div>
+            <iframe id="inline-book-iframe" class="w-full h-[520px] rounded-2xl bg-white border-2 border-white/20" src="about:blank"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+<!-- ================= FIN DE LA PARTE 1 DE 2 (PEGA DEBAJO LA PARTE 2) ================= -->

@@ -200,6 +200,42 @@
             🖨️ Imprimir Registro de Inscripción
           </button>
         </div>
+        <!-- ESCÁNER MÁGICO DE FICHAS ESCRITAS A MANO POR LOS PADRES -->
+        <div class="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-indigo-950 via-blue-950 to-slate-900 text-white shadow-md space-y-3">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase px-3 py-0.5 rounded-full bg-amber-400 text-slate-950">✨ Ahorra Tiempo • Lector de Letra a Mano</span>
+              <h3 class="text-base sm:text-lg font-extrabold mt-1">📸 Pasar Hoja del Padre de Familia sin Escribir a Mano</h3>
+              <p class="text-xs sm:text-sm text-blue-100">Tómale una foto a la ficha escrita a mano y las cajitas de abajo se llenarán solas, o cópiala desde tu chat de Gemini.</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 shrink-0">
+              <!-- OPCIÓN 1: CÁMARA DIRECTA EN LA APP -->
+              <label class="cursor-pointer bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm px-5 py-3 rounded-2xl shadow-lg flex items-center gap-2 transition">
+                📸 <span>1. Tomar Foto a Ficha a Mano</span>
+                <input type="file" accept="image/*" capture="environment" onchange="scanHandwrittenEnrollmentPhoto(event)" class="hidden" />
+              </label>
+
+              <!-- OPCIÓN 2: USAR SU CHAT DE GEMINI -->
+              <button type="button" onclick="openGeminiForHandwrittenPhoto()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 font-bold text-xs sm:text-sm px-4 py-3 rounded-2xl flex items-center gap-1.5">
+                ✨ <span>2. Ir a Gemini</span>
+              </button>
+
+              <button type="button" onclick="pasteEnrollmentFromGeminiText()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs sm:text-sm px-4 py-3 rounded-2xl shadow flex items-center gap-1.5">
+                📋 <span>3. Pegar Datos Copiados</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Estado del escaneo y miniatura de la foto para verificar -->
+          <div id="scan-status-box" class="hidden pt-3 border-t border-white/15 flex flex-col sm:flex-row items-center gap-4 text-xs">
+            <img id="scan-photo-preview" class="h-24 w-auto rounded-xl border border-white/30 bg-black object-contain" />
+            <div class="space-y-1">
+              <div id="scan-status-text" class="font-extrabold text-sm text-amber-300">🔍 Leyendo la letra a mano de la hoja...</div>
+              <p class="text-blue-200">Revisa que los datos en las cajas de abajo sean correctos y toca el botón azul <strong>"➕ Guardar Alumno(a) en el Grupo"</strong>.</p>
+            </div>
+          </div>
+        </div>
 
         <!-- Formulario con los 9 campos exactos en el orden pedido -->
         <form id="enrollment-form" onsubmit="saveStudentEnrollment(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3.5 bg-blue-50/50 p-4 sm:p-5 rounded-3xl border border-blue-200/80">
@@ -986,6 +1022,8 @@
       urlChatGemini: 'https://gemini.google.com/',
       // Pega aquí el link de la carpeta principal de Google Drive de tu mamá:
       urlCarpetaDrivePrincipal: 'https://drive.google.com/drive/my-drive'
+      // Pega aquí tu API Key gratuita de Google AI Studio para que la cámara lea letra a mano:
+      geminiApiKey: 'AQ.Ab8RN6LaeDIuiQhFKMAOVJn2PfNqbuHXgWniB6GGMpdrS7sTWA'
     };
 
     /* 📚 CATÁLOGO DE LIBROS DE TEXTO POR GRADO (1° A 6° DE PRIMARIA)
@@ -2556,6 +2594,166 @@ CEDO EL MICRÓFONO AL DIRECTOR DE LA ESCUELA ${h.director} PARA LAS RECOMENDACIO
       }
     }
 
+    // =========================================================================
+    // 📸 LECTOR INTELIGENTE DE HOJAS DE INSCRIPCIÓN ESCRITAS A MANO
+    // =========================================================================
+
+    // Si se detecta la CURP, extrae automáticamente Fecha de Nacimiento, Edad y Sexo
+    function autofillFromCURPString(curpStr) {
+      const clean = (curpStr || '').trim().toUpperCase();
+      if (clean.length < 11) return;
+      const yy = clean.substring(4, 6);
+      const mm = clean.substring(6, 8);
+      const dd = clean.substring(8, 10);
+      const genderChar = clean.charAt(10);
+
+      if (/^\d{2}$/.test(yy) && /^\d{2}$/.test(mm) && /^\d{2}$/.test(dd)) {
+        const yearNum = parseInt(yy, 10);
+        const fullYear = yearNum <= 35 ? 2000 + yearNum : 1900 + yearNum;
+        const isoDate = `${fullYear}-${mm}-${dd}`;
+        document.getElementById('enr-dob').value = isoDate;
+        autoCalculateAgeFromDOB(isoDate);
+      }
+      if (genderChar === 'M') {
+        document.getElementById('enr-sex').value = 'Mujer (Niña)';
+      } else if (genderChar === 'H') {
+        document.getElementById('enr-sex').value = 'Hombre (Niño)';
+      }
+    }
+
+    // 1. Escáner directo con la cámara usando Gemini Vision
+    async function scanHandwrittenEnrollmentPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const statusBox = document.getElementById('scan-status-box');
+      const statusText = document.getElementById('scan-status-text');
+      const imgPreview = document.getElementById('scan-photo-preview');
+
+      const reader = new FileReader();
+      reader.onload = async function (e) {
+        const dataUrl = e.target.result;
+        const base64Data = dataUrl.split(',')[1];
+        statusBox.classList.remove('hidden');
+        imgPreview.src = dataUrl;
+
+        const apiKey = (CONFIG_VINCULOS_LUIS.geminiApiKey || '').trim();
+        if (!apiKey || apiKey === 'PEGA_AQUI_TU_API_KEY') {
+          statusText.textContent = '💡 Se abrió la foto como guía visual. Para que se llene sola sin escribir, usa el botón "2. Ir a Gemini" o agrega tu API Key.';
+          return;
+        }
+
+        statusText.textContent = '⏳ Leyendo la letra escrita a mano de la hoja... espera 3 segundos.';
+
+        try {
+          const prompt = `Lee esta hoja o ficha de inscripción escolar (puede estar escrita a mano) y extrae los datos del alumno. Devuelve ÚNICAMENTE un objeto JSON válido con estas claves exactas:
+          {
+            "matricula": "matrícula o folio si aparece, si no déjalo vacío",
+            "curp": "CURP de 18 caracteres en mayúsculas",
+            "name": "NOMBRE COMPLETO DEL ALUMNO EMPEZANDO POR APELLIDOS EN MAYÚSCULAS",
+            "dob": "YYYY-MM-DD",
+            "age": 7,
+            "sex": "Mujer (Niña)" o "Hombre (Niño)",
+            "repeater": "No" o "Sí",
+            "address": "Dirección o domicilio completo",
+            "guardian": "Nombre completo del padre, madre o tutor"
+          }`;
+
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{
+                parts: [
+                  { text: prompt },
+                  { inlineData: { mimeType: file.type || 'image/jpeg', data: base64Data } }
+                ]
+              }]
+            })
+          });
+
+          const result = await response.json();
+          const rawText = result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            fillEnrollmentBoxesFromObject(parsed);
+            statusText.textContent = '✅ ¡Listo! Datos extraídos de la foto. Solo revísalos y presiona "➕ Guardar Alumno(a)".';
+            showToast('✨ Ficha escrita a mano leída con éxito');
+          } else {
+            statusText.textContent = '⚠️ No se distinguieron todos los datos. Puedes completarlos en las cajas de abajo.';
+          }
+        } catch (err) {
+          statusText.textContent = '⚠️ Revisa tu conexión a internet o usa el botón "2. Ir a Gemini".';
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function fillEnrollmentBoxesFromObject(obj) {
+      if (obj.matricula) document.getElementById('enr-matricula').value = String(obj.matricula).toUpperCase();
+      if (obj.curp) {
+        document.getElementById('enr-curp').value = String(obj.curp).toUpperCase();
+        autofillFromCURPString(obj.curp);
+      }
+      if (obj.name) document.getElementById('enr-name').value = String(obj.name).toUpperCase();
+      if (obj.dob && /^\d{4}-\d{2}-\d{2}$/.test(obj.dob)) {
+        document.getElementById('enr-dob').value = obj.dob;
+        autoCalculateAgeFromDOB(obj.dob);
+      }
+      if (obj.age) document.getElementById('enr-age').value = Number(obj.age);
+      if (obj.sex) {
+        document.getElementById('enr-sex').value = String(obj.sex).toLowerCase().includes('hombre') || String(obj.sex).toLowerCase().includes('niño')
+          ? 'Hombre (Niño)'
+          : 'Mujer (Niña)';
+      }
+      if (obj.repeater) {
+        document.getElementById('enr-repeater').value = String(obj.repeater).toLowerCase().includes('s') ? 'Sí' : 'No';
+      }
+      if (obj.address) document.getElementById('enr-address').value = obj.address;
+      if (obj.guardian) document.getElementById('enr-guardian').value = obj.guardian;
+    }
+
+    // 2. Opción alternativa sin API Key: ir a la App de Gemini con la orden ya copiada
+    function openGeminiForHandwrittenPhoto() {
+      const instruction = `Lee la foto de esta hoja de inscripción escrita a mano y devuélveme los datos exactamente en este formato para copiar y pegar:\nMATRICULA: \nCURP: \nNOMBRE (Apellidos primero): \nFECHA_NAC (AAAA-MM-DD): \nEDAD: \nSEXO (Niña o Niño): \nREPETIDOR (Sí o No): \nDIRECCION: \nTUTOR: `;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(instruction);
+        showToast('📋 Instrucción copiada. Solo sube la foto en Gemini y pega el texto.');
+      }
+      window.open(CONFIG_VINCULOS_LUIS.urlChatGemini, '_blank');
+    }
+
+    // 3. Pegar lo que respondió el chat de Gemini y llenar las 9 cajas automáticamente
+    async function pasteEnrollmentFromGeminiText() {
+      let text = '';
+      try {
+        text = await navigator.clipboard.readText();
+      } catch (e) {
+        text = prompt('Pega aquí el texto que te dio Gemini:') || '';
+      }
+      if (!text.trim()) return showToast('Primero copia la respuesta de Gemini');
+
+      const getVal = (regex) => {
+        const m = text.match(regex);
+        return m ? m[1].trim() : '';
+      };
+
+      fillEnrollmentBoxesFromObject({
+        matricula: getVal(/MATR[IÍ]CULA\s*:\s*(.+)/i),
+        curp: getVal(/CURP\s*:\s*([A-Z0-9]{10,18})/i),
+        name: getVal(/NOMBRE.*:\s*(.+)/i),
+        dob: getVal(/FECHA.*:\s*(\d{4}-\d{2}-\d{2})/i),
+        age: getVal(/EDAD\s*:\s*(\d+)/i),
+        sex: getVal(/SEXO.*:\s*(.+)/i),
+        repeater: getVal(/REPETIDOR.*:\s*(.+)/i),
+        address: getVal(/DIRECCI[OÓ]N\s*:\s*(.+)/i) || getVal(/DOMICILIO\s*:\s*(.+)/i),
+        guardian: getVal(/TUTOR\s*:\s*(.+)/i) || getVal(/PADRE.*:\s*(.+)/i)
+      });
+
+      showToast('✅ Cajas llenadas con los datos pegados de Gemini');
+    }
     window.addEventListener('DOMContentLoaded', () => {
       updateTopBanner();
       renderEnrollmentSection();

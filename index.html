@@ -2754,6 +2754,7 @@ CEDO EL MICRÓFONO AL DIRECTOR DE LA ESCUELA ${h.director} PARA LAS RECOMENDACIO
 
       showToast('✅ Cajas llenadas con los datos pegados de Gemini');
     }
+    
     window.addEventListener('DOMContentLoaded', () => {
       updateTopBanner();
       renderEnrollmentSection();
@@ -2769,7 +2770,7 @@ CEDO EL MICRÓFONO AL DIRECTOR DE LA ESCUELA ${h.director} PARA LAS RECOMENDACIO
       renderPrintPreviewByType('inscripcion');
       setupPWA();
       // Siempre muestra la pregunta amigable del tutorial al abrir la app
-      openWelcomeTutorialModal(false);
+      openWelcomeTutorialModal(true);
     });
   </script>
 </body>

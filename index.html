@@ -2638,7 +2638,7 @@ CEDO EL MICRÓFONO AL DIRECTOR DE LA ESCUELA ${h.director} PARA LAS RECOMENDACIO
         imgPreview.src = dataUrl;
 
         const apiKey = (CONFIG_VINCULOS_LUIS.geminiApiKey || '').trim();
-        if (!apiKey || apiKey === 'PEGA_AQUI_TU_API_KEY') {
+        if (!apiKey || apiKey === 'AQ.Ab8RN6LaeDIuiQhFKMAOVJn2PfNqbuHXgWniB6GGMpdrS7sTWA') {
           statusText.textContent = '💡 Se abrió la foto como guía visual. Para que se llene sola sin escribir, usa el botón "2. Ir a Gemini" o agrega tu API Key.';
           return;
         }
@@ -2770,7 +2770,7 @@ CEDO EL MICRÓFONO AL DIRECTOR DE LA ESCUELA ${h.director} PARA LAS RECOMENDACIO
       renderPrintPreviewByType('inscripcion');
       setupPWA();
       // Siempre muestra la pregunta amigable del tutorial al abrir la app
-      openWelcomeTutorialModal(true);
+      openWelcomeTutorialModal(false);
     });
   </script>
 </body>
